@@ -14,9 +14,12 @@ df_train = pd.read_csv("./data/train.csv")
 df_test = pd.read_csv("./data/test.csv")
 df_test_tags = pd.read_csv("./data/sample_submission.csv")
 
-df_train.fillna("NA", inplace=True)
-df_test.fillna("NA", inplace=True)
-df_test_tags.fillna("NA", inplace=True)
+df_test["SalePrice"] = df_test_tags["SalePrice"].values.tolist()
+
+df = pd.concat([df_train,df_test], ignore_index=True)
+
+df.fillna("NA", inplace=True)
+print(df["MSZoning"])
 
 categorical_nominal_features = ["MSZoning", "Street", "Alley", "LotShape", "LandContour", "Utilities", "LotConfig",
                                 "LandSlope", "Neighborhood", "Condition1", "Condition2", "BldgType", "HouseStyle",
@@ -55,40 +58,27 @@ feature_scale_dict = {
     "GarageFinish": GarageFinish_dict,
     "Fence": Fence_dict
 }
-print(df_train[categorical_ordinal_features].loc[0].values.tolist())
+print(df[categorical_ordinal_features].loc[0].values.tolist())
 for feature in categorical_nominal_features:
     # change enum values to integer
     le = LabelEncoder()
-
-    df = pd.concat([df_train[feature], df_test[feature]])
-    le.fit(df)
-
-    df_train[feature] = le.transform(df_train[feature])
-    df_test[feature] = le.transform(df_test[feature])
+    df[feature] = le.fit_transform(df[feature])
 
 for feature in categorical_ordinal_features:
     dict = feature_scale_dict[feature]
 
-    df_train[feature] = df_train[feature].apply(lambda x: dict[x])
-    df_test[feature] = df_test[feature].apply(lambda x: dict[x])
+    df[feature] = df[feature].apply(lambda x: dict[x])
 
-print(df_train[categorical_ordinal_features].loc[0].values.tolist())
+print(df[categorical_ordinal_features].loc[0].values.tolist())
 
-df_test.replace("NA", 0, inplace=True)
-df_train.replace("NA", 0, inplace=True)
+df.replace("NA", 0, inplace=True)
 
 # splitting data from tags
-X_train = df_train.drop(["SalePrice"], axis=1)
-Y_train = df_train["SalePrice"].values
+X_train = df.drop(["SalePrice"], axis=1)
+Y_train = df["SalePrice"].values
 
-X_train = X_train.values.tolist()
+X_train, X_test, Y_train, Y_test = train_test_split(X_train, Y_train, test_size=0.10)
 
-# definizione test set e tags associati
-X_test = df_test.values.tolist()
-Y_test = df_test_tags["SalePrice"].values.tolist()
-
-X_train_1, X_val_1, Y_train_1, Y_val_1 = train_test_split(X_train, Y_train, test_size=0.10)
-X_test_1, Y_test_1 = X_test, Y_test
 
 linear_regression = LinearRegression()
 linear_regression.fit(X_train, Y_train)
