@@ -1,0 +1,32 @@
+Cerchiamo di ridurre il numero di feature tenendo solo quelle che dovrebbero essere le più utili, andando quindi a ridurre la dimensionalità dei dati rimuovendo le features superflue
+Si occupa principalmente di rimuovere caratteristiche ridondanti e non informative
+La rimozione di queste feature aiuta la complessità computazionele inoltre, in alcuni modelli, la presenza di feature non rilevanti può peggiorare le prestazioni
+Nel nostro caso abbiamo a che fare con una regression supervisionata, di conseguenza i metodi di feature selection utilizzano il target per individuare le feature superflue
+
+Metodi usati per la feature selection supervisionata:
+    -Filter:
+        -veloci, funzionano molto bene per la rimozione di feature duplicate, correlate e ridondanti
+        -valuta la qualità della feature in base ai risultati di test statistici e non per cross validation
+        -indipendente dal modello
+
+        -approcci:
+            -statistical methods
+            -feature importance
+
+        -esempi:
+            -Pearson's correlation (reale -> reale): It is used as a measure for quantifying linear dependence between two continuous variables X and Y. Its value varies from -1 to +1
+            -Anova (categorico -> reale/reale -> categorico): ANOVA stands for Analysis of variance. It is similar to LDA except for the fact that it is operated using one or more categorical independent features and one continuous dependent feature. It provides a statistical test of whether the means of several groups are equal or not.
+            -LDA (reale -> categorico): Linear discriminant analysis is used to find a linear combination of features that characterizes or separates two or more classes (or levels) of a categorical variable.
+            -Chi-squared (categorico -> categorico): It is a is a statistical test applied to the groups of categorical features to evaluate the likelihood of correlation or association between them using their frequency distribution.
+
+            -alcuni vengono usati per la regressione mentre altri per la classificazione, ad esempio Anova si può utilizzare per la regressione
+            -attento: ci sono tecniche lineari e non, ad esempio Pearson’s correlation coefficient è lineare mentre Spearman’s rank coefficient non lo è
+    -Wrapper:
+        -molto più costoso, utilizza la cross validation su più modelli e testando vari sottoinsiemi di feature
+
+        -esempi
+            -Forward Selection: metodo iterativo in cui si comincia
+    -Intrinsic/Embedded: This includes algorithms such as penalized regression models like Lasso and decision trees, including ensembles of decision trees like random forest.
+
+
+MULTICOLINEARITY??????
