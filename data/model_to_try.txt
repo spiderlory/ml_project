@@ -1,0 +1,11 @@
+lineare(baseline)
+alberi decisionali
+begging
+boosting
+random forest
+adaboost
+gradient boosting
+regressione logistica
+knearestneighbor
+
+//k-fold validation//
